@@ -5,7 +5,7 @@
         <meta name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="css/style.css">
         <title>Dashboard</title>
 
         <!-- Font Awesome -->
@@ -26,41 +26,28 @@
 
         <header>
             <!-- Navbar -->
-            <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-white">
-                <div class="container-fluid">
-                    <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-mdb-toggle="collapse"
-                        data-mdb-target="#navbarExample01"
-                        aria-controls="navbarExample01"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarExample01">
+            <nav id="navbar" class="navcont">
 
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
-                            <li class="nav-item">
-                                <a class="nav-link" href="#pronostico_diario">Pronostico del dia</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#indicadores">Indicadores</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#pronostico_semanal">Pronostico semanal</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#graficos">Gráficos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#datos">Datos</a>
-                            </li>
-                            
-
-                        </ul>
+                    <div class="container1">
+                        <p class="margen">Monitoreo de inundaciones</p>
+                        <figure class="f"><img class="colocacion" src="Imagenes/precaucion.png"> </figure>                      
                     </div>
-                </div>
+                    <div class="container1">
+                        <p class="margen">Guayaquil</p>
+                        <figure class="f"><img class="colocacion" src="Imagenes/Guayaquil.png">  </figure>                     
+                    </div>
+                    <div class="container1">
+                        <p class="margen">Quito</p>
+                        <figure class="f"><img class="colocacion" src="Imagenes/Quito.png"></figure>
+                    </div>
+                    <div class="container1">
+                        <p class="margen">Machala</p>
+                        <figure class="f"><img class="colocacion" src="Imagenes/Machala.png"></figure>
+                    </div>
+                    <div class="container1">
+                        <p class="margen">Pronostico del tiempo</p>
+                        <figure class="f"><img class="colocacion" src="Imagenes/pronostico-del-tiempo.png"></figure>
+                    </div>
             </nav>
             <!-- Navbar -->
         </header>
@@ -232,7 +219,7 @@
             type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
 
-        <script src="index.js"></script>
+        <script src="js/index.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     </body>
 </html>
