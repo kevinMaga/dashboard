@@ -1,0 +1,209 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+main {
+    padding: 1rem;
+}
+
+section {
+    margin-bottom: 1rem;
+}
+
+h2 {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.data-indicators, .chart-section, .table-section, .result-indicator {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.indicator {
+    margin-bottom: 0.5rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+.f {
+    place-items: center;
+    display: grid;
+    transition: transform 0.3s ease;
+}
+.colocacion1{
+    background-color: rgb(146, 252, 165); 
+    height: 70px;
+    width: 70px;
+    border-radius: 10%;
+}
+.f:hover{
+    transform: scale(1.1);
+}
+.colocacion:hover{
+    border-radius: 10%;
+    background-color: rgb(146, 252, 165);
+}
+
+.colocacion {
+    height: 70px;
+    width: 70px;
+
+}
+.container1 {
+    text-align: center;
+}
+
+.margen {
+    margin-top: 0;
+    margin-bottom: 0rem;
+}
+
+.navcont {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.contenedorImagen{
+    height: 70px;
+    width: 70px;
+}
+/*panel */
+.row {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    margin: 20px 0;
+}
+
+.columnas {
+    background-color: rgb(221, 255, 163);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 200px;
+    height: 100px; /* Asegura una altura consistente */
+    text-align: center; /* Centrar el texto */
+}
+
+.columnas img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px; /* Espacio debajo de la imagen */
+}
+
+.columnas h3 {
+    margin: 0;
+}
+
+.columnas p {
+    margin: 5px 0 0;
+    color: gray;
+}
+/* fin*/
+
+/* Estilo para el contenedor de la tarjeta */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #fff;
+}
+
+/* Estilo para el encabezado de la tarjeta */
+.card-header {
+    background-color: #00c1cb;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 1rem;
+}
+
+/* Centrado del texto en el encabezado */
+.text-center {
+    text-align: center;
+}
+
+/* Márgenes para el contenedor de la sección */
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+/* Estilo para el cuerpo de la tarjeta */
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Estilo para el canvas */
+.my-4 {
+    margin: 2rem 0;
+}
+
+/* Ajuste de tamaño del canvas */
+canvas {
+    height: auto !important;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .navcont {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        display: block;
+    }
+
+    section {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    section {
+        flex: 1 1 calc(50% - 2rem);
+        margin: 0.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    section {
+        flex: 1 1 calc(33% - 2rem);
+    }
+}
