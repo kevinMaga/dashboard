@@ -1,4 +1,4 @@
-import React from 'react';
+//import React from 'react';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 
 const Indicator = ({ title, subtitle, value, value2, image }) => {

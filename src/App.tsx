@@ -11,13 +11,13 @@ import windImage from './assets/wind.png';
 import infoImage from './assets/info.png';
 
 function App() {
-
-  let [indicators, setIndicators] = useState([]);
-  let [rowsTable, setRowsTable] = useState([]);
+  // Especifica el tipo de estado
+  let [indicators, setIndicators] = useState<JSX.Element[]>([]);
+  let [rowsTable, setRowsTable] = useState<{ time: string; uv: number; windSpeed: string; temperature: string; }[]>([]);
 
   useEffect(() => {
     (async () => {
-      let API_KEY = "e4ebd4104ffa941a2d5027a4d709aa33"
+      let API_KEY = "e4ebd4104ffa941a2d5027a4d709aa33";
       let responseOpenWeather = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Guayaquil&mode=xml&appid=${API_KEY}`);
       let savedTextXML = await responseOpenWeather.text();
       const parser = new DOMParser();
@@ -29,49 +29,59 @@ function App() {
       let dataToIndicators = new Array();
 
       let location = xml.getElementsByTagName("location")[1];
-      let geobaseid = location.getAttribute("geobaseid");
-      let latitude = location.getAttribute("latitude");
-      let longitude = location.getAttribute("longitude");
+      if (location) {
+        let geobaseid = location.getAttribute("geobaseid");
+        let latitude = location.getAttribute("latitude");
+        let longitude = location.getAttribute("longitude");
 
-      let temperatureTag = xml.getElementsByTagName("temperature");
-      let temp_max = Number(temperatureTag[0].getAttribute("max"));
-      let temp_min = Number(temperatureTag[0].getAttribute("min"));
-      let temp_prom = (temp_max + temp_min) / 2;
+        let temperatureTag = xml.getElementsByTagName("temperature");
+        if (temperatureTag.length > 0) {
+          let temp_max = Number(temperatureTag[0].getAttribute("max"));
+          let temp_min = Number(temperatureTag[0].getAttribute("min"));
+          let temp_prom = (temp_max + temp_min) / 2;
 
-      let windDirectionTag = xml.getElementsByTagName("windDirection");
-      let WindDirection = windDirectionTag[0].getAttribute("deg") + "° (" + windDirectionTag[0].getAttribute("code") + ")";
-      let windSpeedTag = xml.getElementsByTagName("windSpeed");
-      let windSpeed = windSpeedTag[0].getAttribute("mps") + windSpeedTag[0].getAttribute("unit") + " (" + windSpeedTag[0].getAttribute("name") + ")";
-      let windGustTag = xml.getElementsByTagName("windGust");
-      let windGust = windGustTag[0].getAttribute("gust") + windGustTag[0].getAttribute("unit");
+          let windDirectionTag = xml.getElementsByTagName("windDirection");
+          if (windDirectionTag.length > 0) {
+            let WindDirection = windDirectionTag[0].getAttribute("deg") + "° (" + windDirectionTag[0].getAttribute("code") + ")";
+            let windSpeedTag = xml.getElementsByTagName("windSpeed");
+            if (windSpeedTag.length > 0) {
+              let windSpeed = windSpeedTag[0].getAttribute("mps") + windSpeedTag[0].getAttribute("unit") + " (" + windSpeedTag[0].getAttribute("name") + ")";
+              let windGustTag = xml.getElementsByTagName("windGust");
+              if (windGustTag.length > 0) {
+                let windGust = windGustTag[0].getAttribute("gust") + windGustTag[0].getAttribute("unit");
 
-      let cityName = xml.getElementsByTagName("name")[0].textContent;
-      let country = xml.getElementsByTagName("country")[0].textContent;
-      let timezoneTag = xml.getElementsByTagName("timezone")[0].textContent;
-      let timezone = Number(timezoneTag) / 3600;
+                let cityName = xml.getElementsByTagName("name")[0]?.textContent;
+                let country = xml.getElementsByTagName("country")[0]?.textContent;
+                let timezoneTag = xml.getElementsByTagName("timezone")[0]?.textContent;
+                let timezone = Number(timezoneTag) / 3600;
 
-      dataToIndicators.push(["Temperatura", "Max: " + temp_max + "°C", "Min: " + temp_min + "°C", "Avg: " + Math.round(temp_prom) + "°C", temperatureImage]);
-      dataToIndicators.push(["Viento", "Direction: " + WindDirection, "Speed: " + windSpeed, "Gust: " + windGust, windImage]);
-      dataToIndicators.push(["Localición", "Latitude: " + latitude, "Longitude: " + longitude, "Geobase: " + geobaseid, locationImage]);
-      dataToIndicators.push(["Información", "City: " + cityName, "Country: " + country, "Time zone: " + "UTC" + timezone, infoImage]);
+                dataToIndicators.push(["Temperatura", "Max: " + temp_max + "°C", "Min: " + temp_min + "°C", "Avg: " + Math.round(temp_prom) + "°C", temperatureImage]);
+                dataToIndicators.push(["Viento", "Direction: " + WindDirection, "Speed: " + windSpeed, "Gust: " + windGust, windImage]);
+                dataToIndicators.push(["Localición", "Latitude: " + latitude, "Longitude: " + longitude, "Geobase: " + geobaseid, locationImage]);
+                dataToIndicators.push(["Información", "City: " + cityName, "Country: " + country, "Time zone: " + "UTC" + timezone, infoImage]);
 
-      let indicatorsElements = Array.from(dataToIndicators).map(
-        (element) => <Indicator title={element[0]} subtitle={element[1]} value={element[2]} value2={element[3]} image={element[4]} />
-      );
+                let indicatorsElements = Array.from(dataToIndicators).map(
+                  (element) => <Indicator title={element[0]} subtitle={element[1]} value={element[2]} value2={element[3]} image={element[4]} />
+                );
 
-      let hourlyData = dataJson.hourly;
+                let hourlyData = dataJson.hourly;
 
-      let mappedData = hourlyData.time.map((time, index) => {
-        return {
-          "time": time.split("T")[1],
-          "uv": hourlyData.uv_index[index],
-          "windSpeed": hourlyData.windspeed_1000hPa[index] + " " + "km/h",
-          "temperature": hourlyData.temperature_2m[index] + " " + "°C"
-        };
-      });
+                let mappedData = hourlyData.time.map((time: string, index: number) => {
+                  return {
+                    "time": time.split("T")[1],
+                    "uv": hourlyData.uv_index[index],
+                    "windSpeed": hourlyData.windspeed_1000hPa[index] + " " + "km/h",
+                    "temperature": hourlyData.temperature_2m[index] + " " + "°C"
+                  };
+                });
 
-      setRowsTable(mappedData);
-      setIndicators(indicatorsElements);
+                setRowsTable(mappedData);
+                setIndicators(indicatorsElements);
+              }
+            }
+          }
+        }
+      }
     })();
   }, []);
 
