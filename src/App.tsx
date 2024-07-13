@@ -13,7 +13,7 @@ import infoImage from './assets/info.png';
 import guayaquilImage from './assets/Guayaquil.png'; // Asegúrate de tener estas imágenes en tu proyecto
 import machalaImage from './assets/Machala.png';
 import quitoImage from './assets/Quito.png';
-
+// Kevin Magallanes
 function App() {
   const [indicators, setIndicators] = useState<JSX.Element[]>([]);
   const [rowsTable, setRowsTable] = useState<{ time: string; uv: number; windSpeed: string; temperature: string; }[]>([]);
