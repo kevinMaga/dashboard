@@ -1,102 +1,114 @@
-import { useEffect, useState } from 'react';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import Indicator from './components/Indicator';
-import Summary from './components/Summary';
 import BasicTable from './components/BasicTable';
-import WeatherChart from './components/WeatherChart';
-import ControlPanel from './components/ControlPanel';
-import { Container, Paper, Typography, AppBar, Toolbar } from '@mui/material';
+import Componente from './components/Componente';
+import { useEffect, useState } from 'react';
+import { Container, Paper, Typography, AppBar, Toolbar, CssBaseline } from '@mui/material';
 import './App.css';
+import locationImage from './assets/location.png';  // Asegúrate de tener estas imágenes en tu proyecto
+import temperatureImage from './assets/temperature.png';
+import windImage from './assets/wind.png';
+import infoImage from './assets/info.png';
 
 function App() {
+
+  let [indicators, setIndicators] = useState([]);
   let [rowsTable, setRowsTable] = useState([]);
-  const [indicators, setIndicators] = useState([]);
-  const [selectedVariable, setSelectedVariable] = useState("");
 
   useEffect(() => {
     (async () => {
-      let savedTextXML = localStorage.getItem("openWeatherMap");
-      let expiringTime = localStorage.getItem("expiringTime");
-      let nowTime = new Date().getTime();
-
-      if (expiringTime === null || nowTime > parseInt(expiringTime)) {
-        let API_KEY = "e4ebd4104ffa941a2d5027a4d709aa33";
-        let response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Guayaquil&mode=xml&appid=${API_KEY}`);
-        savedTextXML = await response.text();
-
-        let hours = 1;
-        let delay = hours * 3600000;
-
-        localStorage.setItem("openWeatherMap", savedTextXML);
-        localStorage.setItem("expiringTime", (nowTime + delay).toString());
-      }
-
+      let API_KEY = "e4ebd4104ffa941a2d5027a4d709aa33"
+      let responseOpenWeather = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Guayaquil&mode=xml&appid=${API_KEY}`);
+      let savedTextXML = await responseOpenWeather.text();
       const parser = new DOMParser();
       const xml = parser.parseFromString(savedTextXML, "application/xml");
-      let dataToIndicators = [];
+
+      let responseOpenMeteo = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=-2.1962&longitude=-79.8862&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,rain,cloud_cover,visibility,uv_index,sunshine_duration,windspeed_1000hPa,winddirection_1000hPa&daily=temperature_2m_max,temperature_2m_min,uv_index_max,uv_index_clear_sky_max&timezone=auto&forecast_days=1`);
+      let dataJson = await responseOpenMeteo.json();
+
+      let dataToIndicators = new Array();
 
       let location = xml.getElementsByTagName("location")[1];
       let geobaseid = location.getAttribute("geobaseid");
-      dataToIndicators.push(["Location", "geobaseid", geobaseid]);
-
       let latitude = location.getAttribute("latitude");
-      dataToIndicators.push(["Location", "Latitude", latitude]);
-
       let longitude = location.getAttribute("longitude");
-      dataToIndicators.push(["Location", "Longitude", longitude]);
 
-      let indicatorsElements = dataToIndicators.map(
-        (element, index) => <Indicator key={index} title={element[0]} subtitle={element[1]} value={element[2]} />
+      let temperatureTag = xml.getElementsByTagName("temperature");
+      let temp_max = Number(temperatureTag[0].getAttribute("max"));
+      let temp_min = Number(temperatureTag[0].getAttribute("min"));
+      let temp_prom = (temp_max + temp_min) / 2;
+
+      let windDirectionTag = xml.getElementsByTagName("windDirection");
+      let WindDirection = windDirectionTag[0].getAttribute("deg") + "° (" + windDirectionTag[0].getAttribute("code") + ")";
+      let windSpeedTag = xml.getElementsByTagName("windSpeed");
+      let windSpeed = windSpeedTag[0].getAttribute("mps") + windSpeedTag[0].getAttribute("unit") + " (" + windSpeedTag[0].getAttribute("name") + ")";
+      let windGustTag = xml.getElementsByTagName("windGust");
+      let windGust = windGustTag[0].getAttribute("gust") + windGustTag[0].getAttribute("unit");
+
+      let cityName = xml.getElementsByTagName("name")[0].textContent;
+      let country = xml.getElementsByTagName("country")[0].textContent;
+      let timezoneTag = xml.getElementsByTagName("timezone")[0].textContent;
+      let timezone = Number(timezoneTag) / 3600;
+
+      dataToIndicators.push(["Location", "Latitude: " + latitude, "Longitude: " + longitude, "Geobase: " + geobaseid, locationImage]);
+      dataToIndicators.push(["Temperature", "Max: " + temp_max + "°C", "Min: " + temp_min + "°C", "Avg: " + Math.round(temp_prom) + "°C", temperatureImage]);
+      dataToIndicators.push(["Wind", "Direction: " + WindDirection, "Speed: " + windSpeed, "Gust: " + windGust, windImage]);
+      dataToIndicators.push(["Info", "City: " + cityName, "Country: " + country, "Time zone: " + "UTC" + timezone, infoImage]);
+
+      let indicatorsElements = Array.from(dataToIndicators).map(
+        (element) => <Indicator title={element[0]} subtitle={element[1]} value={element[2]} value2={element[3]} image={element[4]} />
       );
 
-      setIndicators(indicatorsElements);
+      let hourlyData = dataJson.hourly;
 
-      let arrayObjects = Array.from(xml.getElementsByTagName("time")).map((timeElement) => {
-        let rangeHours = timeElement.getAttribute("from").split("T")[1] + " - " + timeElement.getAttribute("to").split("T")[1];
-        let precipitation = timeElement.getElementsByTagName("precipitation")[0].getAttribute("probability");
-        let windDirection = timeElement.getElementsByTagName("windDirection")[0].getAttribute("deg") + " " + timeElement.getElementsByTagName("windDirection")[0].getAttribute("code");
-        let temperature = timeElement.getElementsByTagName("temperature")[0].getAttribute("unit") + " " + timeElement.getElementsByTagName("temperature")[0].getAttribute("value");
-        let humidity = timeElement.getElementsByTagName("humidity")[0].getAttribute("value") + " " + timeElement.getElementsByTagName("humidity")[0].getAttribute("unit");
-
-        return { "rangeHours": rangeHours, "windDirection": windDirection, "precipitation": precipitation, "temperature": temperature, "humidity": humidity };
+      let mappedData = hourlyData.time.map((time, index) => {
+        return {
+          "time": time.split("T")[1],
+          "uv": hourlyData.uv_index[index],
+          "windSpeed": hourlyData.windspeed_1000hPa[index] + " " + "km/h",
+          "temperature": hourlyData.temperature_2m[index] + " " + "°C"
+        };
       });
 
-      arrayObjects = arrayObjects.slice(0, 8);
-      setRowsTable(arrayObjects);
+      setRowsTable(mappedData);
+      setIndicators(indicatorsElements);
     })();
   }, []);
 
   return (
     <>
-      <AppBar position="static">
+      <CssBaseline />
+      <AppBar position="static" style={{ backgroundColor: '#3f51b5' }}>
         <Toolbar>
-          <Typography variant="h2" component="div">
+          <Typography variant="h4" component="div" style={{ color: '#ffffff' }}>
             Dashboard de Datos
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="lg">
-        <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
-
+      <Container maxWidth="lg" style={{ marginTop: '30px' }}>
+        <Paper elevation={3} style={{ padding: '20px', backgroundColor: '#fafafa', borderRadius: '10px' }}>
           <Grid container spacing={5}>
-            {indicators.map((indicator, index) => (
-              <Grid xs={6} lg={2} key={index}>
-                {indicator}
-              </Grid>
-            ))}
-            <Grid xs={6} md={4} lg={2}>
-              <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} />
+            <Grid xs={12} md={6} lg={3}>
+              {indicators[3]}
             </Grid>
-            <Grid xs={6} sm={4} md={3} lg={2}>
-              <Summary />
+
+            <Grid xs={12} md={6} lg={3}>
+              {indicators[0]}
             </Grid>
-            <Grid xs={12} lg={10}>
-              <WeatherChart selectedVariable={selectedVariable} rows={rowsTable} />
+
+            <Grid xs={12} md={6} lg={3}>
+              {indicators[1]}
             </Grid>
-            <Grid xs={12} lg={2}>
-              <ControlPanel setValorActual={setSelectedVariable} />
+
+            <Grid xs={12} md={6} lg={3}>
+              {indicators[2]}
             </Grid>
-            <Grid xs={12} lg={8}>
+
+            <Grid xs={12}>
+              <Componente />
+            </Grid>
+
+            <Grid xs={12}>
               <BasicTable rows={rowsTable} />
             </Grid>
           </Grid>

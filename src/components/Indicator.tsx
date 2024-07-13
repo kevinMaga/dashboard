@@ -1,28 +1,30 @@
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-export default function Indicator(config: Config) {
-    return (
-        <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
-            <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                {config.title} 
+import React from 'react';
+import { Card, CardContent, Typography, Box } from '@mui/material';
+
+const Indicator = ({ title, subtitle, value, value2, image }) => {
+  return (
+    <Card style={{ backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
+      <CardContent>
+        <Box display="flex" alignItems="center">
+          {image && <img src={image} alt={title} style={{ width: 50, height: 50, marginRight: 20 }} />}
+          <Box>
+            <Typography variant="h5" component="div" style={{ color: '#3f51b5' }}>
+              {title}
             </Typography>
-            <Typography component="p" variant="h4">
-                {config.value.toString()}
+            <Typography variant="body2" style={{ color: '#757575' }}>
+              {subtitle}
             </Typography>
-            <Typography color="text.secondary" sx={{ flex: 1 }}>
-                {config.subtitle}
+            <Typography variant="body2" style={{ color: '#757575' }}>
+              {value}
             </Typography>
-        </Paper> 
-    )
-}
-interface Config {
-    title?: String;
-    subtitle?: String;
-    value: Number;
-}
+            <Typography variant="body2" style={{ color: '#757575' }}>
+              {value2}
+            </Typography>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default Indicator;
