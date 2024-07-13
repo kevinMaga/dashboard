@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Box } from '@mui/material';
 
 const Indicator = ({ title, subtitle, value, value2, image }) => {
   return (
-    <Card style={{ backgroundColor: '#f5f5f5', borderRadius: '10px' }}>
+    <Card style={{ backgroundColor: '#b2fba6', borderRadius: '10px' }}>
       <CardContent>
         <Box display="flex" alignItems="center">
           {image && <img src={image} alt={title} style={{ width: 50, height: 50, marginRight: 20 }} />}

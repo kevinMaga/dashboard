@@ -50,10 +50,10 @@ function App() {
       let timezoneTag = xml.getElementsByTagName("timezone")[0].textContent;
       let timezone = Number(timezoneTag) / 3600;
 
-      dataToIndicators.push(["Location", "Latitude: " + latitude, "Longitude: " + longitude, "Geobase: " + geobaseid, locationImage]);
-      dataToIndicators.push(["Temperature", "Max: " + temp_max + "°C", "Min: " + temp_min + "°C", "Avg: " + Math.round(temp_prom) + "°C", temperatureImage]);
-      dataToIndicators.push(["Wind", "Direction: " + WindDirection, "Speed: " + windSpeed, "Gust: " + windGust, windImage]);
-      dataToIndicators.push(["Info", "City: " + cityName, "Country: " + country, "Time zone: " + "UTC" + timezone, infoImage]);
+      dataToIndicators.push(["Temperatura", "Max: " + temp_max + "°C", "Min: " + temp_min + "°C", "Avg: " + Math.round(temp_prom) + "°C", temperatureImage]);
+      dataToIndicators.push(["Viento", "Direction: " + WindDirection, "Speed: " + windSpeed, "Gust: " + windGust, windImage]);
+      dataToIndicators.push(["Localición", "Latitude: " + latitude, "Longitude: " + longitude, "Geobase: " + geobaseid, locationImage]);
+      dataToIndicators.push(["Información", "City: " + cityName, "Country: " + country, "Time zone: " + "UTC" + timezone, infoImage]);
 
       let indicatorsElements = Array.from(dataToIndicators).map(
         (element) => <Indicator title={element[0]} subtitle={element[1]} value={element[2]} value2={element[3]} image={element[4]} />
@@ -78,15 +78,15 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <AppBar position="static" style={{ backgroundColor: '#3f51b5' }}>
+      <AppBar position="static" style={{ backgroundColor: '#4fb53f', borderRadius: '20px'}}>
         <Toolbar>
-          <Typography variant="h4" component="div" style={{ color: '#ffffff' }}>
+          <Typography variant="h2" component="div" style={{ color: '#ffffff' }}>
             Dashboard de Datos
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="lg" style={{ marginTop: '30px' }}>
-        <Paper elevation={3} style={{ padding: '20px', backgroundColor: '#fafafa', borderRadius: '10px' }}>
+      <Container maxWidth="xl" style={{ marginTop: '30px' }}>
+        <Paper elevation={3} style={{ padding: '20px', backgroundColor: '#fbfacc', borderRadius: '10px' }}>
           <Grid container spacing={5}>
             <Grid xs={12} md={6} lg={3}>
               {indicators[3]}

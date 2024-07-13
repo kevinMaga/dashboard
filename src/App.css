@@ -1,7 +1,7 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: auto;
+  margin:  auto;
+  padding: 1rem;
   text-align: center;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .read-the-docs {
-  color: #888;
+  color: #fbfacc;
 }
 body {
   background-color: #f4f4f9;
@@ -68,10 +68,6 @@ body {
   align-items: center;
 }
 
-.MuiPaper-root {
-  border-radius: 10px;
-}
-
 .MuiGrid-container {
   margin-top: 20px;
 }
@@ -80,8 +76,23 @@ body {
   display: flex;
   justify-content: center;
   background-color: #4fb53f;
+  border-radius: 10px;
 }
 
 .MuiTypography-h6 {
   color: white;
+}
+
+.App {
+  text-align: center;
+}
+
+.MuiCard-root {
+  margin-bottom: 20px;
+  padding: 20px;
+  transition: box-shadow 0.3s;
+}
+
+.MuiCard-root:hover {
+  box-shadow: 0 5px 20px rgb(25, 130, 43);
 }
