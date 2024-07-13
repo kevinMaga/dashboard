@@ -2,23 +2,27 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import Indicator from './components/Indicator';
 import BasicTable from './components/BasicTable';
 import Componente from './components/Componente';
+import Card from './components/Card'; // Importa el nuevo componente Card
 import { useEffect, useState } from 'react';
 import { Container, Paper, Typography, AppBar, Toolbar, CssBaseline } from '@mui/material';
 import './App.css';
-import locationImage from './assets/location.png';  // Asegúrate de tener estas imágenes en tu proyecto
+import locationImage from './assets/location.png';
 import temperatureImage from './assets/temperature.png';
 import windImage from './assets/wind.png';
 import infoImage from './assets/info.png';
+import guayaquilImage from './assets/Guayaquil.png'; // Asegúrate de tener estas imágenes en tu proyecto
+import machalaImage from './assets/Machala.png';
+import quitoImage from './assets/Quito.png';
 
 function App() {
-  // Especifica el tipo de estado
-  let [indicators, setIndicators] = useState<JSX.Element[]>([]);
-  let [rowsTable, setRowsTable] = useState<{ time: string; uv: number; windSpeed: string; temperature: string; }[]>([]);
+  const [indicators, setIndicators] = useState<JSX.Element[]>([]);
+  const [rowsTable, setRowsTable] = useState<{ time: string; uv: number; windSpeed: string; temperature: string; }[]>([]);
+  const [selectedCity, setSelectedCity] = useState('Quito');
 
   useEffect(() => {
     (async () => {
       let API_KEY = "e4ebd4104ffa941a2d5027a4d709aa33";
-      let responseOpenWeather = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Guayaquil&mode=xml&appid=${API_KEY}`);
+      let responseOpenWeather = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${selectedCity}&mode=xml&appid=${API_KEY}`);
       let savedTextXML = await responseOpenWeather.text();
       const parser = new DOMParser();
       const xml = parser.parseFromString(savedTextXML, "application/xml");
@@ -69,8 +73,8 @@ function App() {
                 let mappedData = hourlyData.time.map((time: string, index: number) => {
                   return {
                     "time": time.split("T")[1],
-                    "uv": hourlyData.uv_index[index],
                     "windSpeed": hourlyData.windspeed_1000hPa[index] + " " + "km/h",
+                    "uv": hourlyData.uv_index[index],
                     "temperature": hourlyData.temperature_2m[index] + " " + "°C"
                   };
                 });
@@ -83,7 +87,7 @@ function App() {
         }
       }
     })();
-  }, []);
+  }, [selectedCity]);
 
   return (
     <>
@@ -95,29 +99,39 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
+      <Container style={{ marginTop: '20px' }}>
+        <Paper elevation={3} style={{ padding: '20px', backgroundColor: '#fbfacc', borderRadius: '10px' }}>
+          <Grid container spacing={3} justifyContent="center" alignItems="center">
+            <Grid xs={12} md={6} lg={3}>
+              <Card title="Guayaquil" image={guayaquilImage} onClick={() => setSelectedCity('Guayaquil')} />
+            </Grid>
+            <Grid xs={12} md={6} lg={3}>
+              <Card title="Machala" image={machalaImage} onClick={() => setSelectedCity('Machala')} />
+            </Grid>
+            <Grid xs={12} md={6} lg={3}>
+              <Card title="Quito" image={quitoImage} onClick={() => setSelectedCity('Quito')} />
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
       <Container maxWidth="xl" style={{ marginTop: '30px' }}>
         <Paper elevation={3} style={{ padding: '20px', backgroundColor: '#fbfacc', borderRadius: '10px' }}>
           <Grid container spacing={5}>
             <Grid xs={12} md={6} lg={3}>
               {indicators[3]}
             </Grid>
-
             <Grid xs={12} md={6} lg={3}>
               {indicators[0]}
             </Grid>
-
             <Grid xs={12} md={6} lg={3}>
               {indicators[1]}
             </Grid>
-
             <Grid xs={12} md={6} lg={3}>
               {indicators[2]}
             </Grid>
-
             <Grid xs={12}>
               <Componente />
             </Grid>
-
             <Grid xs={12}>
               <BasicTable rows={rowsTable} />
             </Grid>

@@ -49,8 +49,8 @@ export default function BasicTable(data: Config) {
               <TableCell align="center" component="th" scope="row">
                 {row.time}
               </TableCell>
-              <TableCell align="center">{row.uv}</TableCell>
               <TableCell align="center">{row.windSpeed}</TableCell>
+              <TableCell align="center">{row.uv}</TableCell>
               <TableCell align="center">{row.temperature}</TableCell>
             </TableRow>
           ))}
