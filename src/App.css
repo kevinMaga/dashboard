@@ -40,3 +40,48 @@
 .read-the-docs {
   color: #888;
 }
+body {
+  background-color: #f4f4f9;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.MuiAppBar-root {
+  background-color: #4caf50; /* Color verde */
+}
+
+.MuiPaper-root {
+  background-color: #fff;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.MuiTypography-h4 {
+  color: #4fb53f;
+  text-align: center;
+}
+
+.MuiGrid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.MuiPaper-root {
+  border-radius: 10px;
+}
+
+.MuiGrid-container {
+  margin-top: 20px;
+}
+
+.MuiToolbar-root {
+  display: flex;
+  justify-content: center;
+  background-color: #4fb53f;
+}
+
+.MuiTypography-h6 {
+  color: white;
+}
